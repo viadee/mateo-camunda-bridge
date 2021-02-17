@@ -77,7 +77,7 @@ Mögliche Werte sind, default: `R3/PT5M`
 
 
 <br>
-![Properties konfiguration](./images/Properties.png)
+![ExtensionProperties konfiguration](./images/ExtensionProperties.png) 
 
 #### Variablen definieren
 Die Variablen die im Testkript zur Verfügung stehen sollen, werden im Tab `Input/Output` unter `Input Parameters` als Map `extIn_mateoParams` angegeben:
