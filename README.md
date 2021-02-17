@@ -73,10 +73,10 @@ Mögliche Werte sind, default: `R3/PT5M`
 - `R1/P1D`: 1 retry after 1 day
 - `R2/PT2H`: 2 retries after 2 hours each
 - `R3/PT3M`: 3 retries after 3 minutes each
-- `PT5M,PT10M,PT20M,PT1H,PT12H,P1D`: 6 increasing retries; 5, 10, 20 minutes, 12 hours, 1 day
-
+- `PT5M,PT10M,PT20M,PT1H,PT12H,P1D`: 6 increasing retries; 5, 10, 20 minutes, 12 hours, 1 day 
 
 <br>
+
 ![ExtensionProperties konfiguration](./images/ExtensionProperties.png) 
 
 #### Variablen definieren
