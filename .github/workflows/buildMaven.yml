@@ -18,4 +18,4 @@ jobs:
          java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
          architecture: x64 # (x64 or x86) - defaults to x64
       - name: Publish package
-        run: mvn --batch-mode deploy
+        run: mvn -B package --file pom.xml
