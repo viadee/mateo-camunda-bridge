@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "server.url",
+      "type": "java.lang.String"
+    }
+  ]
+}
