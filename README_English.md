@@ -85,7 +85,8 @@ Possible values are, default: `R3/PT5M`
 
 
 <br>
-![Properties konfiguration](./images/Properties.png)
+
+![ExtensionProperties konfiguration](./images/ExtensionProperties.png) 
 
 #### Define variables
 The variables that should be available in the test script are specified in the tab `Input/Output` under `Input Parameters` as map `extIn_mateoParams`:
