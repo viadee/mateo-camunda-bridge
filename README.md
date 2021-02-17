@@ -1,4 +1,6 @@
 ## Mateo Camunda RPA Bridge
+[![](https://img.shields.io/github/issues/viadee/mateo-camunda-bridge)](https://github.com/viadee/mateo-camunda-bridge/issues)
+[![](https://img.shields.io/github/stars/viadee/mateo-camunda-bridge)](https://github.com/viadee/mateo-camunda-bridge/stargazers)
 
 Repository für die Mateo-Camunda-Bridge
 
