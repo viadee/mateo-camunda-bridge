@@ -9,12 +9,12 @@ Die Mateo-Camunda-Bridge ist eine eigenständige Anwendung, die es ermöglicht, 
 ## Funktionsweise
 
 ### Single Mateo Instanz
-Die Mateo-Camunda-Bridge dient als Konnektor zwischen Camunda (BPMN) auf der einen und mateo (RPA) auf der anderen Seite. Prozesse, die innerhalb der Camunda-Engine laufen, können externe Tasks definieren, die als RPA-Tasks markiert sind.
+Die Mateo-Camunda-Bridge dient als Konnektor zwischen Camunda (BPMN) auf der einen und mateo auf der anderen Seite. Prozesse, die innerhalb der Camunda-Engine laufen, können externe Tasks definieren, die als mateo-Tasks markiert sind.
 
-Die Bridge erweitert den regulären Java External Task Client, holt und sperrt die RPA Aufgaben und startet ein Skript in mateo. Sobald das Skript erledigt ist, wird der Prozess fortgesetzt. Die hinterlegten Ergebnisvariablen vn mateo werden dabei an die Camunda Engine weitergeben.
+Die Bridge erweitert den regulären Java External Task Client, holt und sperrt die mateo Aufgaben und startet ein Skript in mateo. Sobald das Skript erledigt ist, wird der Prozess fortgesetzt. Die hinterlegten Ergebnisvariablen vn mateo werden dabei an die Camunda Engine weitergeben.
 
 ### Multi Mateo Instanzen
-Desweiteren kann die Mateo-Camunda-Bridge als Konnektor zwischen Camunda (BPMN) auf der einen Seite und dem Mateo-Orchestrator (RPAs) auf der anderen dienen. Die Funktionsweise ist die selbe wie oben, mit dem Unterschied, dass die Skripte zum ![Mateo-Orchestrator](https://github.com/viadee/mateo-orchestrator) (In Progress) übertragen werden werden.
+Desweiteren kann die Mateo-Camunda-Bridge als Konnektor zwischen Camunda (BPMN) auf der einen Seite und dem Mateo-Orchestrator auf der anderen dienen. Die Funktionsweise ist die selbe wie oben, mit dem Unterschied, dass die Skripte zum ![Mateo-Orchestrator](https://github.com/viadee/mateo-orchestrator) übertragen werden. Der Mateo-Orchestrator befindet sich noch in der Entwicklung und wird demnächst veröffentlicht.
 
 ## Voraussetzungen und unterstützte Umgebungen
 
@@ -60,14 +60,14 @@ Präfix | Eigenschaften | Beschreibung
 
 
 ### Einrichten einer RPA-Aufgabe
-Die RPA-Bridge ist ein regulärer externer Java-Task-Client und RPA-Tasks sind externe Tasks mit spezifischen Einstellungen.
+Die RPA-Bridge ist ein regulärer externer Java-Task-Client und RPA-Tasks sind [externe Tasks](https://docs.camunda.org/manual/latest/user-guide/process-engine/external-tasks/) mit spezifischen Einstellungen.
 
 Die Bridge lauscht auf Tasks mit den definierten Topic `mateo`. Wenn eine Prozessinstanz eine externe Aufgabe mit einem dieser Themen erreicht, kann die Bridge sie abholen und sperren. Sobald eine Aufgabe gesperrt ist, versucht die Bridge, sie an Ihre Installation von mateo oder dem mateo-orchestrator weiterzuleiten, die sich um die Ausführung des zugehörigen Testskripts kümmert.
 <br>
 ![Topic konfiguration](./images/TopicName.png)
 
 #### Testkript definieren
-Um der Bridge mitzuteilen, welches Testkript gestartet werden soll, ist es notwendig, eine Erweiterungseigenschaft (Extensions Properties) mit dem Namen `MATEO_SCRIPT` und einem Wert gleich dem Pfad zum Testkript hinzuzufügen. Zusätzlich kann per `RETRY_CONFIG` das Retryverhalten angegeben werden:
+Um der Bridge mitzuteilen, welches Testkript gestartet werden soll, ist es notwendig, eine Erweiterungseigenschaft ([Extensions Properties](https://docs.camunda.org/manual/latest/reference/bpmn20/custom-extensions/extension-elements/#properties)) mit dem Namen `MATEO_SCRIPT` und einem Wert gleich dem Pfad zum Testkript hinzuzufügen. Zusätzlich kann per `RETRY_CONFIG` das Retryverhalten angegeben werden:
 
 Mögliche Werte sind, default: `R3/PT5M`
 - `R1/P1D`: 1 retry after 1 day
