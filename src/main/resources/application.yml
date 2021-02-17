@@ -1,26 +1,32 @@
-spring:
-  profiles:
-    active: default
 de.viadee.mateo.rpa:
   camunda-api:
-    url: http://localhost:8081/engine-rest
-    lockDuration: 3600000
-    lockFactor: 2
-    lockMaxTime: 600
-    initTime: 500
-    authentication:
-      type: basic
-      username: demo
-      password: demo
+    url: http://localhost:8080/engine-rest
+    # optional lockDuration, defaults to 3600000
+    # lockDuration:
+    # optional lockFactor, defaults to 2
+    # lockFactor:
+    # optional lockMaxTime, defaults to 600
+    # lockMaxTime:
+    # optional initTime, defaults to 500
+    # initTime:
+    # add authentication if necessary
+  #   authentication:
+  #     type: basic
+  #     username: demo
+  #     password: demo
   mateo-api:
-    topic: mateo
+    # optional topic, defaults to mateo
+    # topic:
+    # type can be 'mateo' or 'orchestrator'
     type: mateo
     url: http://localhost:8123
-    errorCode: mateoError
-    authentication:
-      enable: false
-      username:
-      password:
+    # optional errorCode, defaults to mateoError
+    # errorCode:
+    # add authentication if mateo roboter is used
+#    authentication:
+#      enable: false
+#      username:
+#      password:
 server:
   url: localhost
   port: 8082

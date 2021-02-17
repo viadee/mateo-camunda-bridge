@@ -15,13 +15,13 @@ import java.net.URL;
 @ConfigurationProperties(prefix = "de.viadee.mateo.rpa.mateo-api")
 public class MateoApiProperties {
 
-    private String topic;
+    private String topic = "mateo";
 
     private String type;
 
     private URL url;
 
-    private String errorCode;
+    private String errorCode = "mateoError";
 
     public String getType() {
         return type;
