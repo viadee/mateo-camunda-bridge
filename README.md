@@ -14,7 +14,7 @@ Die Mateo-Camunda-Bridge dient als Konnektor zwischen Camunda (BPMN) auf der ein
 Die Bridge erweitert den regulären Java External Task Client, holt und sperrt die RPA Aufgaben und startet ein Skript in mateo. Sobald das Skript erledigt ist, wird der Prozess fortgesetzt. Die hinterlegten Ergebnisvariablen vn mateo werden dabei an die Camunda Engine weitergeben.
 
 ### Multi Mateo Instanzen
-Desweiteren kann die Mateo-Camunda-Bridge als Konnektor zwischen Camunda (BPMN) auf der einen Seite und dem Mateo-Orchestrator (RPAs) auf der anderen dienen. Die Funktionsweise ist die selbe wie oben, mit dem Unterschied, dass die Skripte zum ![Mateo-Orchestrator](https://gitlab.intern.viadee.de/gitlab/vtf/mateo-orchestrator) übertragen werden werden.
+Desweiteren kann die Mateo-Camunda-Bridge als Konnektor zwischen Camunda (BPMN) auf der einen Seite und dem Mateo-Orchestrator (RPAs) auf der anderen dienen. Die Funktionsweise ist die selbe wie oben, mit dem Unterschied, dass die Skripte zum ![Mateo-Orchestrator](https://github.com/viadee/mateo-orchestrator) übertragen werden werden.
 
 ## Voraussetzungen und unterstützte Umgebungen
 
