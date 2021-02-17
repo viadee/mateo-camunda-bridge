@@ -1,4 +1,4 @@
-## Mateo Camunda RPA Bridge
+# Mateo Camunda RPA Bridge
 [![](https://img.shields.io/github/issues/viadee/mateo-camunda-bridge)](https://github.com/viadee/mateo-camunda-bridge/issues)
 [![](https://img.shields.io/github/stars/viadee/mateo-camunda-bridge)](https://github.com/viadee/mateo-camunda-bridge/stargazers)
 
@@ -6,16 +6,17 @@ Repository für die Mateo-Camunda-Bridge
 
 Die Mateo-Camunda-Bridge ist eine eigenständige Anwendung, die es ermöglicht, mateo-Skripts aus BPMN-Modellen aufzurufen, die in einer Camunda Engine eingesetzt werden.
 
-### Funktionsweise
-#### Single Mateo Instanz
+## Funktionsweise
+
+### Single Mateo Instanz
 Die Mateo-Camunda-Bridge dient als Konnektor zwischen Camunda (BPMN) auf der einen und mateo (RPA) auf der anderen Seite. Prozesse, die innerhalb der Camunda-Engine laufen, können externe Tasks definieren, die als RPA-Tasks markiert sind.
 
 Die Bridge erweitert den regulären Java External Task Client, holt und sperrt die RPA Aufgaben und startet ein Skript in mateo. Sobald das Skript erledigt ist, wird der Prozess fortgesetzt. Die hinterlegten Ergebnisvariablen vn mateo werden dabei an die Camunda Engine weitergeben.
 
-#### Multi Mateo Instanzen
+### Multi Mateo Instanzen
 Desweiteren kann die Mateo-Camunda-Bridge als Konnektor zwischen Camunda (BPMN) auf der einen Seite und dem Mateo-Orchestrator (RPAs) auf der anderen dienen. Die Funktionsweise ist die selbe wie oben, mit dem Unterschied, dass die Skripte zum ![Mateo-Orchestrator](https://gitlab.intern.viadee.de/gitlab/vtf/mateo-orchestrator) übertragen werden werden.
 
-### Voraussetzungen und unterstützte Umgebungen
+## Voraussetzungen und unterstützte Umgebungen
 
 Um Testskripte von Camunda auszuführen, benötigen Sie:
 
@@ -26,12 +27,12 @@ Um ein BPMN-Modell zu entwerfen, das sich über die Bridge mit einem oder mehrer
 - Cawemo 1.4 oder höher (zum Erstellen und Verteilen von Worker-Katalogen)
 - Camunda Modeler 4.2 oder höher (um den Worker-Katalog auf Ihr Prozessmodell anzuwenden)
 
-### Konfiguration
+## Konfiguration
 
-#### Mateo-Camunda-Bridge
+### Mateo-Camunda-Bridge
 Die Bridge ist über die Datei application.yml konfigurierbar.
 
-##### Zugriff auf die Camunda API:
+#### Zugriff auf die Camunda API:
 
 Präfix | Eigenschaften | Beschreibung
 -------- | -------- | --------
@@ -45,7 +46,7 @@ de.viadee.mateo.rpa.camunda-api   | url   | Die URL zur Camunda REST API (z.B. h
   " | authentication.username | Benutzername
    " | authentication.password | Benutzerkennwort
 
-##### Zugriff auf die mateo API:
+#### Zugriff auf die mateo API:
 
 Präfix | Eigenschaften | Beschreibung
 -------- | -------- | --------
@@ -58,14 +59,14 @@ Präfix | Eigenschaften | Beschreibung
  " | authentication.password | Passwort für den Roboter
 
 
-#### Einrichten einer RPA-Aufgabe
+### Einrichten einer RPA-Aufgabe
 Die RPA-Bridge ist ein regulärer externer Java-Task-Client und RPA-Tasks sind externe Tasks mit spezifischen Einstellungen.
 
 Die Bridge lauscht auf Tasks mit den definierten Topic `mateo`. Wenn eine Prozessinstanz eine externe Aufgabe mit einem dieser Themen erreicht, kann die Bridge sie abholen und sperren. Sobald eine Aufgabe gesperrt ist, versucht die Bridge, sie an Ihre Installation von mateo oder dem mateo-orchestrator weiterzuleiten, die sich um die Ausführung des zugehörigen Testskripts kümmert.
 <br>
 ![Topic konfiguration](./images/TopicName.png)
 
-##### Testkript definieren
+#### Testkript definieren
 Um der Bridge mitzuteilen, welches Testkript gestartet werden soll, ist es notwendig, eine Erweiterungseigenschaft (Extensions Properties) mit dem Namen `MATEO_SCRIPT` und einem Wert gleich dem Pfad zum Testkript hinzuzufügen. Zusätzlich kann per `RETRY_CONFIG` das Retryverhalten angegeben werden:
 
 Mögliche Werte sind, default: `R3/PT5M`
@@ -78,7 +79,7 @@ Mögliche Werte sind, default: `R3/PT5M`
 <br>
 ![Properties konfiguration](./images/Properties.png)
 
-##### Variablen definieren
+#### Variablen definieren
 Die Variablen die im Testkript zur Verfügung stehen sollen, werden im Tab `Input/Output` unter `Input Parameters` als Map `extIn_mateoParams` angegeben:
 <br>
 ![InputParameter konfiguration](./images/InputParameter.png)
@@ -91,9 +92,7 @@ Sowohl die Map als auch die List müssen für ein korrektes Feherhandling angege
 In jedem Fall wird eine neue Prozessvariable `extOut_mateoScriptResult` erzeugt, welche das Ergebnis des Testskriptes beinhaltet (`Erfolg`, `Warnung`, `NoRun`, `Fehler`, `Abbruch`, `Timeout`, `Unbekannt`).
 
 
-#### BPMN Error
+### BPMN Error
 Ein BPMN Error wird geschmissen, wenn
 - Das Testskript nicht mit `Erfolg` abgeschlossen wurde
 - Ein Fehler beim Lesen der Variablen auftrat
-
-
