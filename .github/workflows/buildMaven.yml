@@ -20,5 +20,3 @@ jobs:
          architecture: x64 # (x64 or x86) - defaults to x64
       - name: Publish package
         run: mvn --batch-mode deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
