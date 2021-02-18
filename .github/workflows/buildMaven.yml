@@ -1,8 +1,16 @@
 # This workflow will build a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Build Mateo Camunda Bridge
+name: Build and Deploy Mateo Camunda Bridge
+
+env:
+  # TODO: Change variable to your image's name.
+  IMAGE_NAME: mateo_camunda_bridge_image
+
+
+# Controls when the action will run.
 on:
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch: 
 
 jobs:
@@ -17,5 +25,16 @@ jobs:
          java-version: '15' # The JDK version to make available on the path.
          java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
          architecture: x64 # (x64 or x86) - defaults to x64
-      - name: Publish package
+      
+      - name: Build with Maven
         run: mvn -B package --file pom.xml
+        working-directory: .
+
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: viadee/mateo-camunda-bridge/$IMAGE_NAME
+          tag_with_ref: true
