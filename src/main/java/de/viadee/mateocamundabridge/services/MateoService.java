@@ -46,11 +46,9 @@ public class MateoService {
 
     private static final String PARAM_FILENAME = "filename";
 
-    private static final String API_STORAGE_SET = "api/storage/set";
+    private static final String API_STORAGE = "api/storage";
 
     private static final String PARAM_KEY = "key";
-
-    private static final String PARAM_VALUE = "value";
 
     private static final String API_STORAGE_GET = "api/storage/get";
 
@@ -82,7 +80,8 @@ public class MateoService {
      * @param outputParams output variables for the testscript
      * @return response from mateo
      */
-    public ReportDTO startScriptWithVariables(String scriptName, Map<String, Object> inputParams, List<String> outputParams) {
+    public ReportDTO startScriptWithVariables(String scriptName, Map<String, Object> inputParams,
+            List<String> outputParams) {
         setStorageVariables(VariableConverter.toMapStringString(inputParams));
         ReportDTO reportDTO = startScript(scriptName);
         reportDTO.setOutputVariables(getStorageVariables(outputParams));
@@ -118,7 +117,8 @@ public class MateoService {
                     .build()
                     .toUri();
             responseEntity = restTemplate.getForEntity(uri.toString(), String.class);
-            if (responseEntity.getStatusCodeValue() >= 300 || responseEntity.getStatusCode().equals(HttpStatus.NO_CONTENT) ||Objects.isNull(responseEntity.getBody())) {
+            if (responseEntity.getStatusCodeValue() >= 300 || responseEntity.getStatusCode()
+                    .equals(HttpStatus.NO_CONTENT) || Objects.isNull(responseEntity.getBody())) {
                 LOGGER.warn("Variable: {} could not be read", variable);
                 failed = true;
                 resultMap.put(variable, NOT_FOUND);
@@ -140,27 +140,22 @@ public class MateoService {
      */
     public void setStorageVariables(Map<String, String> scriptVariables) {
         LOGGER.info("Write variables to storage: {}", scriptVariables);
-        for (Map.Entry<String, String> entry : scriptVariables.entrySet()) {
-            URI uri = UriComponentsBuilder.newInstance()
-                    .scheme(mateoApiProperties.getUrl().getProtocol())
-                    .host(mateoApiProperties.getUrl().getHost())
-                    .port(mateoApiProperties.getUrl().getPort())
-                    .path(API_STORAGE_SET)
-                    .queryParam(PARAM_KEY, entry.getKey())
-                    .queryParam(PARAM_VALUE, entry.getValue())
-                    .build()
-                    .toUri();
-            HttpHeaders headers = getHttpHeaders();
-            Map<String, Object> map = new HashMap<>();
-            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map, headers);
-            ResponseEntity<String> response = this.restTemplate.postForEntity(uri.toString(), entity, String.class);
 
-            if (response.getStatusCodeValue() >= 300) {
-                throw new MateoBridgeRuntimeException(
-                        String.format("Variable '%s' with value '%s' could not be written to the storage file.",
-                                entry.getKey(), entry.getValue()));
-            }
+        URI uri = UriComponentsBuilder.newInstance()
+                .scheme(mateoApiProperties.getUrl().getProtocol())
+                .host(mateoApiProperties.getUrl().getHost())
+                .port(mateoApiProperties.getUrl().getPort())
+                .path(API_STORAGE)
+                .build()
+                .toUri();
+        HttpHeaders headers = getHttpHeaders();
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(scriptVariables, headers);
+        ResponseEntity<String> response = this.restTemplate.postForEntity(uri.toString(), entity, String.class);
+
+        if (response.getStatusCodeValue() >= 300) {
+            throw new MateoBridgeRuntimeException("Variables could not be written to the storage file.");
         }
+
     }
 
     /**

@@ -13,23 +13,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -50,8 +45,7 @@ class MateoServiceTest {
     @Autowired
     private MateoApiProperties mateoApiProperties;
 
-    @Value("${de.viadee.mateo.rpa.mateo-api.url}")
-    private String url;
+    private String url = "http://localhost:8080";
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -176,7 +170,7 @@ class MateoServiceTest {
         //given
         Map<String, String> scriptVariables = new HashMap<>();
         scriptVariables.put("someKey", "sValue");
-        String expectedUrl = url + "/api/storage/set?key=someKey&value=sValue";
+        String expectedUrl = url + "/api/storage";
 
         //when
         when(mateoService.getRestTemplate()
@@ -187,7 +181,7 @@ class MateoServiceTest {
                 () -> mateoService.setStorageVariables(scriptVariables));
 
         // then
-        assertEquals("Variable 'someKey' with value 'sValue' could not be written to the storage file.",
+        assertEquals("Variables could not be written to the storage file.",
                 exception.getMessage());
     }
 
@@ -196,18 +190,21 @@ class MateoServiceTest {
         //given
         Map<String, String> scriptVariables = new HashMap<>();
         scriptVariables.put("sKey", "sValue");
-        String expectedUrl = url + "/api/storage/set?key=sKey&value=sValue";
+        String expectedUrl = url + "/api/storage";
+
+        HttpHeaders headers = getHttpHeaders();
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(scriptVariables, headers);
 
         //when
         when(mateoService.getRestTemplate()
-                .postForEntity(eq(expectedUrl), any(), eq(String.class)))
+                .postForEntity(eq(expectedUrl), eq(entity), eq(String.class)))
                 .thenReturn(new ResponseEntity<>("sVariable", HttpStatus.OK));
 
         mateoService.setStorageVariables(scriptVariables);
 
         // then
         verify(mateoService.getRestTemplate(), times(1))
-                .postForEntity(eq(expectedUrl), any(), eq(String.class));
+                .postForEntity(eq(expectedUrl), eq(entity), eq(String.class));
     }
 
     @Test
@@ -217,27 +214,20 @@ class MateoServiceTest {
         scriptVariables.put("oneKey", "oneValue");
         scriptVariables.put("twoKey", "twoValue");
         scriptVariables.put("threeKey", "threeValue");
-        String expectedUrlOne = url + "/api/storage/set?key=oneKey&value=oneValue";
-        String expectedUrlTwo = url + "/api/storage/set?key=twoKey&value=twoValue";
-        String expectedUrlThree = url + "/api/storage/set?key=threeKey&value=threeValue";
+        String requestUrl = url + "/api/storage";
+
+        HttpHeaders headers = getHttpHeaders();
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(scriptVariables, headers);
 
         //when
-        when(mateoService.getRestTemplate().postForEntity(eq(expectedUrlOne), any(), eq(String.class)))
-                .thenReturn(new ResponseEntity<>("oneValue", HttpStatus.OK));
-        when(mateoService.getRestTemplate().postForEntity(eq(expectedUrlTwo), any(), eq(String.class)))
-                .thenReturn(new ResponseEntity<>("twoValue", HttpStatus.OK));
-        when(mateoService.getRestTemplate().postForEntity(eq(expectedUrlThree), any(), eq(String.class)))
-                .thenReturn(new ResponseEntity<>("threeValue", HttpStatus.OK));
+        when(mateoService.getRestTemplate().postForEntity(eq(requestUrl), eq(entity), eq(String.class)))
+                .thenReturn(new ResponseEntity<>("{\"oneKey\":\"oneValue\",\"twoKey\":\"twoValue\",\"threeKey\":\"threeValue\"}", HttpStatus.OK));
 
         mateoService.setStorageVariables(scriptVariables);
 
         // then
         verify(mateoService.getRestTemplate(), times(1))
-                .postForEntity(eq(expectedUrlOne), any(), eq(String.class));
-        verify(mateoService.getRestTemplate(), times(1))
-                .postForEntity(eq(expectedUrlTwo), any(), eq(String.class));
-        verify(mateoService.getRestTemplate(), times(1))
-                .postForEntity(eq(expectedUrlThree), any(), eq(String.class));
+                .postForEntity(eq(requestUrl), eq(entity), eq(String.class));
 
     }
 
@@ -373,6 +363,13 @@ class MateoServiceTest {
 
         //then
         assertEquals("Script run wasn't successful", exception.getMessage());
+    }
+
+    private HttpHeaders getHttpHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        return headers;
     }
 
     @Configuration

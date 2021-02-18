@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -54,8 +53,7 @@ class MateoOrchestratorServiceTest {
     @Autowired
     private MateoApiProperties mateoApiProperties;
 
-    @Value("${de.viadee.mateo.rpa.mateo-api.url}")
-    private String url;
+    private String url = "http://localhost:8080";
 
     private final ExternalTask externalTask = mock(ExternalTask.class, Mockito.RETURNS_DEEP_STUBS);
 
