@@ -31,10 +31,10 @@ jobs:
         working-directory: .
 
       - name: Push to GitHub Packages
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: viadee/mateo-camunda-bridge/$IMAGE_NAME
+          repository: viadee/mateo-camunda-bridge/mateo_camunda_bridge_image
           tag_with_ref: true
