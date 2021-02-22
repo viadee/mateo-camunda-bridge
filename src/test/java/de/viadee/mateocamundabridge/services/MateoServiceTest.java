@@ -170,7 +170,7 @@ class MateoServiceTest {
         //given
         Map<String, String> scriptVariables = new HashMap<>();
         scriptVariables.put("someKey", "sValue");
-        String expectedUrl = url + "/api/storage";
+        String expectedUrl = url + "/api/storage/set-all";
 
         //when
         when(mateoService.getRestTemplate()
@@ -190,7 +190,7 @@ class MateoServiceTest {
         //given
         Map<String, String> scriptVariables = new HashMap<>();
         scriptVariables.put("sKey", "sValue");
-        String expectedUrl = url + "/api/storage";
+        String expectedUrl = url + "/api/storage/set-all";
 
         HttpHeaders headers = getHttpHeaders();
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(scriptVariables, headers);
@@ -214,7 +214,7 @@ class MateoServiceTest {
         scriptVariables.put("oneKey", "oneValue");
         scriptVariables.put("twoKey", "twoValue");
         scriptVariables.put("threeKey", "threeValue");
-        String requestUrl = url + "/api/storage";
+        String requestUrl = url + "/api/storage/set-all";
 
         HttpHeaders headers = getHttpHeaders();
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(scriptVariables, headers);

@@ -46,7 +46,7 @@ public class MateoService {
 
     private static final String PARAM_FILENAME = "filename";
 
-    private static final String API_STORAGE = "api/storage";
+    private static final String API_STORAGE_SET_ALL = "api/storage/set-all";
 
     private static final String PARAM_KEY = "key";
 
@@ -145,7 +145,7 @@ public class MateoService {
                 .scheme(mateoApiProperties.getUrl().getProtocol())
                 .host(mateoApiProperties.getUrl().getHost())
                 .port(mateoApiProperties.getUrl().getPort())
-                .path(API_STORAGE)
+                .path(API_STORAGE_SET_ALL)
                 .build()
                 .toUri();
         HttpHeaders headers = getHttpHeaders();
