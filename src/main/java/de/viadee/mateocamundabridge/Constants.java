@@ -15,6 +15,13 @@ public class Constants {
 
     public static final String MATEO = "mateo";
 
+    public static final String JOB_STATUS_FINISHED = "FINISHED";
+
+    public static final String JOB_STATUS_FAILED = "FAILED";
+
+    public static final String JOB_STATUS_RUNNING = "RUNNING";
+
+
     private Constants() {
     }
 }
