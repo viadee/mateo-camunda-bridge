@@ -8,9 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * @author Marcel_Flasskamp
- */
 @Validated
 @Configuration
 @EnableConfigurationProperties

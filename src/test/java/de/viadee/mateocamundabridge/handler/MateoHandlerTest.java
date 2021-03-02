@@ -25,9 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-/**
- * @author Marcel_Flasskamp
- */
 @ExtendWith(SpringExtension.class)
 @SpringJUnitConfig
 @SpringBootTest

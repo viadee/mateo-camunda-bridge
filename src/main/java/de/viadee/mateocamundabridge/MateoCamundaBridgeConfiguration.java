@@ -17,9 +17,6 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import java.util.UUID;
 
-/**
- * @author Marcel_Flasskamp
- */
 @Configuration
 public class MateoCamundaBridgeConfiguration {
 

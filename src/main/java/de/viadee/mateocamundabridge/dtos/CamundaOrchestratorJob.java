@@ -5,9 +5,6 @@ import org.camunda.bpm.client.task.ExternalTaskService;
 
 import java.util.Date;
 
-/**
- * @author Marcel_Flasskamp
- */
 public class CamundaOrchestratorJob {
 
     private String uuid;

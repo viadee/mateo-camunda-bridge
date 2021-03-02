@@ -1,8 +1,5 @@
 package de.viadee.mateocamundabridge;
 
-/**
- * @author Marcel_Flasskamp
- */
 public abstract class ProcessConstants {
 
     public static final String EXTIN_MATEOSCRIPT = "MATEO_SCRIPT";

@@ -1,8 +1,5 @@
 package de.viadee.mateocamundabridge;
 
-/**
- * @author Marcel_Flasskamp
- */
 public class Constants {
 
     public static final String NOT_FOUND = "notFound";
