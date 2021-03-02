@@ -1,8 +1,5 @@
 package de.viadee.mateocamundabridge;
 
-/**
- * @author Marcel_Flasskamp
- */
 public class Constants {
 
     public static final String NOT_FOUND = "notFound";
@@ -14,6 +11,13 @@ public class Constants {
     public static final String ORCHESTRATOR = "orchestrator";
 
     public static final String MATEO = "mateo";
+
+    public static final String JOB_STATUS_FINISHED = "FINISHED";
+
+    public static final String JOB_STATUS_FAILED = "FAILED";
+
+    public static final String JOB_STATUS_RUNNING = "RUNNING";
+
 
     private Constants() {
     }

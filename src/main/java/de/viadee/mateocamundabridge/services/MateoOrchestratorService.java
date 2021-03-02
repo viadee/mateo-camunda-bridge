@@ -6,8 +6,6 @@ import de.viadee.mateocamundabridge.Constants;
 import de.viadee.mateocamundabridge.ProcessConstants;
 import de.viadee.mateocamundabridge.dtos.CamundaOrchestratorJob;
 import de.viadee.mateocamundabridge.dtos.OrchestratorJobDTO;
-import de.viadee.mateocamundabridge.dtos.ReportDTO;
-import de.viadee.mateocamundabridge.enums.JobStatus;
 import de.viadee.mateocamundabridge.exceptions.MateoBridgeRuntimeException;
 import de.viadee.mateocamundabridge.properties.MateoApiProperties;
 import de.viadee.mateocamundabridge.utils.VariableConverter;
@@ -26,10 +24,6 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * @author Marcel_Flasskamp
- * Service class to call the mateo-orchestrator
- */
 @Service
 public class MateoOrchestratorService {
 
@@ -77,43 +71,41 @@ public class MateoOrchestratorService {
         if (Objects.nonNull(orchestratorJob) && validateJob(orchestratorJob, queuedJob)) {
             ExternalTaskService externalTaskService = queuedJob.getExternalTaskService();
             ExternalTask externalTask = queuedJob.getExternalTask();
-            orchestratorJob.getReportDTO().getOutputVariables()
-                    .put(ProcessConstants.EXTOUT_MATEO_SCRIPT_RESULT,
-                            orchestratorJob.getReportDTO().getResultString());
-            validateReportDto(orchestratorJob.getReportDTO(), queuedJob);
+            orchestratorJob.getOutputVariables().put(ProcessConstants.EXTOUT_MATEO_SCRIPT_RESULT, orchestratorJob.getResultString());
+            validateReportDto(orchestratorJob, queuedJob);
             LOGGER.info("Complete External Task with Id {}", externalTask.getId());
             externalTaskService.complete(externalTask,
-                    VariableConverter.toEngineValues(orchestratorJob.getReportDTO().getOutputVariables()));
+                    VariableConverter.toEngineValuesFromStringString(orchestratorJob.getOutputVariables()));
             LOGGER.info("Script was running on mateo {}",
-                    orchestratorJob.getReportDTO().getMateoInstanz());
+                    orchestratorJob.getMateoInstanz());
             startedJobs.remove(queuedJob);
         }
     }
 
     private boolean validateJob(OrchestratorJobDTO orchestratorJob, CamundaOrchestratorJob queuedJob) {
-        if (orchestratorJob.getStatus() == JobStatus.FINISHED) {
+        if (orchestratorJob.getStatus().equals(Constants.JOB_STATUS_FINISHED)) {
             return true;
-        } else if (orchestratorJob.getStatus() == JobStatus.FAILED) {
+        } else if (orchestratorJob.getStatus().equals(Constants.JOB_STATUS_FAILED)) {
             startedJobs.remove(queuedJob);
             throw new ExternalTaskBusinessError(mateoApiProperties.getErrorCode(), "Job failed",
-                    VariableConverter.toEngineValues(orchestratorJob.getReportDTO().getOutputVariables()));
+                    VariableConverter.toEngineValuesFromStringString(orchestratorJob.getOutputVariables()));
         } else {
             startedJobs.get(startedJobs.indexOf(queuedJob)).count();
             return false;
         }
     }
 
-    private void validateReportDto(final ReportDTO reportDTO, final CamundaOrchestratorJob queuedJob) {
-        if (!reportDTO.getResultString().equals(Constants.ERFOLG) && !reportDTO.getResultString()
+    private void validateReportDto(final OrchestratorJobDTO orchestratorJobDTO, final CamundaOrchestratorJob queuedJob) {
+        if (!orchestratorJobDTO.getResultString().equals(Constants.ERFOLG) && !orchestratorJobDTO.getResultString()
                 .equals(Constants.SUCCESSFUL)) {
             startedJobs.remove(queuedJob);
             throw new ExternalTaskBusinessError(mateoApiProperties.getErrorCode(), "Script result wasn't successful",
-                    VariableConverter.toEngineValues(reportDTO.getOutputVariables()));
+                    VariableConverter.toEngineValuesFromStringString(orchestratorJobDTO.getOutputVariables()));
         }
-        if (reportDTO.getOutputVariables().containsValue(Constants.NOT_FOUND)) {
+        if (orchestratorJobDTO.getOutputVariables().containsValue(Constants.NOT_FOUND)) {
             startedJobs.remove(queuedJob);
             throw new ExternalTaskBusinessError(mateoApiProperties.getErrorCode(), "Error while reading variables",
-                    VariableConverter.toEngineValues(reportDTO.getOutputVariables()));
+                    VariableConverter.toEngineValuesFromStringString(orchestratorJobDTO.getOutputVariables()));
         }
     }
 
