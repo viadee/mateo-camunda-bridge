@@ -30,3 +30,10 @@ de.viadee.mateo.rpa:
 server:
   url: localhost
   port: 8082
+---
+spring:
+  config:
+    activate:
+      on-profile: test-orchestrator
+de.viadee.mateo.rpa.mateo-api:
+  type: orchestrator

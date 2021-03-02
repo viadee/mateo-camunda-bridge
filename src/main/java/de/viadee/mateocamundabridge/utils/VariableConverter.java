@@ -94,4 +94,22 @@ public class VariableConverter {
         }
         return variables;
     }
+
+    public static Map<String, Object> toEngineValuesFromStringString(Map<String, String> properties) {
+        if (properties == null || properties.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        Map<String, Object> variables = new HashMap<>();
+        for (Entry<String, String> property : properties.entrySet()) {
+            Object value  = property.getValue();
+                try {
+                    value = Date.from(ZonedDateTime
+                            .parse(property.getValue(), DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant());
+                } catch (DateTimeParseException e) {
+                    // do nothing
+                }
+            variables.put(property.getKey(), value);
+        }
+        return variables;
+    }
 }

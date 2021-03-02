@@ -3,9 +3,6 @@ package de.viadee.mateocamundabridge.dtos;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Marcel_Flasskamp
- */
 public class ReportDTO {
 
     private String filePath;
