@@ -2,10 +2,9 @@ package de.viadee.mateocamundabridge.services;
 
 import de.viadee.bpm.camunda.externaltask.retry.aspect.error.ExternalTaskBusinessError;
 import de.viadee.bpm.camunda.externaltask.retry.aspect.error.InstantIncidentException;
+import de.viadee.mateocamundabridge.Constants;
 import de.viadee.mateocamundabridge.dtos.CamundaOrchestratorJob;
 import de.viadee.mateocamundabridge.dtos.OrchestratorJobDTO;
-import de.viadee.mateocamundabridge.dtos.ReportDTO;
-import de.viadee.mateocamundabridge.enums.JobStatus;
 import de.viadee.mateocamundabridge.exceptions.MateoBridgeRuntimeException;
 import de.viadee.mateocamundabridge.properties.MateoApiProperties;
 import org.camunda.bpm.client.task.ExternalTask;
@@ -21,47 +20,38 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-/**
- * @author Marcel_Flasskamp
- */
 @ExtendWith(SpringExtension.class)
 @SpringJUnitConfig
 @SpringBootTest
-@ContextConfiguration(classes = { MateoOrchestratorService.class, MateoApiProperties.class,
+@ActiveProfiles("test-orchestrator")
+@ContextConfiguration(classes = {  MateoApiProperties.class, MateoOrchestratorService.class,
         MateoOrchestratorServiceTest.ContextConfiguration.class })
 class MateoOrchestratorServiceTest {
 
     @Autowired
     private MateoOrchestratorService mateoOrchestratorService;
 
-    @Autowired
-    private MateoApiProperties mateoApiProperties;
-
-    private String url = "http://localhost:8080";
-
     private final ExternalTask externalTask = mock(ExternalTask.class, Mockito.RETURNS_DEEP_STUBS);
 
     private final ExternalTaskService externalTaskService = mock(ExternalTaskService.class, Mockito.RETURNS_DEEP_STUBS);
 
     @BeforeEach
-    public void init() throws MalformedURLException {
-        mateoApiProperties.setUrl(url);
+    public void init() {
         mateoOrchestratorService.startedJobs.clear();
     }
 
@@ -70,7 +60,7 @@ class MateoOrchestratorServiceTest {
         //given
         OrchestratorJobDTO jobDTO = new OrchestratorJobDTO();
         jobDTO.setUuid("testCompleteTask_Count");
-        jobDTO.setStatus(JobStatus.RUNNING);
+        jobDTO.setStatus(Constants.JOB_STATUS_RUNNING);
         CamundaOrchestratorJob camundaOrchestratorJob = new CamundaOrchestratorJob(jobDTO.getUuid(),
                 externalTaskService, externalTask);
         mateoOrchestratorService.startedJobs.add(camundaOrchestratorJob);
@@ -91,7 +81,7 @@ class MateoOrchestratorServiceTest {
     void testValidateAndCompleteJob_Failed() {
         OrchestratorJobDTO jobDTO = new OrchestratorJobDTO();
         jobDTO.setUuid("testCompleteTask_OrchestratorException");
-        jobDTO.setStatus(JobStatus.FAILED);
+        jobDTO.setStatus(Constants.JOB_STATUS_FAILED);
         CamundaOrchestratorJob camundaOrchestratorJob = new CamundaOrchestratorJob(jobDTO.getUuid(),
                 externalTaskService, externalTask);
         mateoOrchestratorService.startedJobs.add(camundaOrchestratorJob);
@@ -132,11 +122,9 @@ class MateoOrchestratorServiceTest {
     void testValidateAndCompleteJob_Correct() {
         //given
         OrchestratorJobDTO jobDTO = new OrchestratorJobDTO();
-        ReportDTO reportDTO = new ReportDTO();
-        reportDTO.setResultString("Erfolg");
+        jobDTO.setResultString("Erfolg");
         jobDTO.setUuid("testCompleteTask_Correct");
-        jobDTO.setStatus(JobStatus.FINISHED);
-        jobDTO.setReportDTO(reportDTO);
+        jobDTO.setStatus(Constants.JOB_STATUS_FINISHED);
         CamundaOrchestratorJob camundaOrchestratorJob = new CamundaOrchestratorJob(jobDTO.getUuid(),
                 externalTaskService, externalTask);
         mateoOrchestratorService.startedJobs.add(camundaOrchestratorJob);
@@ -157,12 +145,11 @@ class MateoOrchestratorServiceTest {
     @Test
     void testValidateAndCompleteJob_ScriptAbort() {
         //given
+        UUID uuid = UUID.randomUUID();
         OrchestratorJobDTO jobDTO = new OrchestratorJobDTO();
-        ReportDTO reportDTO = new ReportDTO();
-        reportDTO.setResultString("Abbruch");
-        jobDTO.setUuid("testCompleteTask_Correct");
-        jobDTO.setStatus(JobStatus.FINISHED);
-        jobDTO.setReportDTO(reportDTO);
+        jobDTO.setResultString("Abbruch");
+        jobDTO.setUuid(uuid.toString());
+        jobDTO.setStatus(Constants.JOB_STATUS_FINISHED);
         CamundaOrchestratorJob camundaOrchestratorJob = new CamundaOrchestratorJob(jobDTO.getUuid(),
                 externalTaskService, externalTask);
         mateoOrchestratorService.startedJobs.add(camundaOrchestratorJob);
@@ -236,10 +223,10 @@ class MateoOrchestratorServiceTest {
     @Test
     void testGetJobResultFromMateoOrchestrator() {
         //given
-        String uuid = "correctuuid";
+        UUID uuid = UUID.randomUUID();
         String requestUrl = "http://localhost:8080/api/job?uuid=" + uuid;
         OrchestratorJobDTO orchestratorJobDTO = new OrchestratorJobDTO();
-        orchestratorJobDTO.setUuid(uuid);
+        orchestratorJobDTO.setUuid(uuid.toString());
 
         //when
         when(mateoOrchestratorService.getRestTemplate()
@@ -247,10 +234,10 @@ class MateoOrchestratorServiceTest {
                         eq(OrchestratorJobDTO.class)))
                 .thenReturn(new ResponseEntity<>(orchestratorJobDTO, HttpStatus.OK));
 
-        OrchestratorJobDTO result = mateoOrchestratorService.getJobResultFromMateoOrchestrator(uuid);
+        OrchestratorJobDTO result = mateoOrchestratorService.getJobResultFromMateoOrchestrator(uuid.toString());
 
         //then
-        assertEquals(uuid, result.getUuid());
+        assertEquals(uuid.toString(), result.getUuid());
     }
 
     @Test
@@ -293,16 +280,19 @@ class MateoOrchestratorServiceTest {
 
     @Test
     void testIsMateoOrchestratorOnline() throws MalformedURLException {
+        URL backupUrl = mateoOrchestratorService.mateoApiProperties.getUrl();
         mateoOrchestratorService.mateoApiProperties.setUrl("http://isOnline.de/");
         when(mateoOrchestratorService.getRestTemplate()
                 .getForEntity(eq("http://isOnline.de/api/job/online"), eq(String.class)))
                 .thenReturn(new ResponseEntity<>("Up", HttpStatus.OK));
         boolean isOnline = mateoOrchestratorService.isMateoOrchestratorOnline();
         assertTrue(isOnline);
+        mateoOrchestratorService.mateoApiProperties.setUrl(backupUrl.toString());
     }
 
     @Test
     void testIsMateoOrchestratorOnline_Offline() throws MalformedURLException {
+        URL backupUrl = mateoOrchestratorService.mateoApiProperties.getUrl();
         mateoOrchestratorService.mateoApiProperties.setUrl("http://isOnline2.de/");
         when(mateoOrchestratorService.getRestTemplate()
                 .getForEntity(eq("http://isOnline2.de/api/job/online"), eq(String.class)))
@@ -312,6 +302,7 @@ class MateoOrchestratorServiceTest {
                 () -> mateoOrchestratorService.isMateoOrchestratorOnline());
 
         assertEquals("Mateoorchestrator is offline", exception.getMessage());
+        mateoOrchestratorService.mateoApiProperties.setUrl(backupUrl.toString());
     }
 
     @Test

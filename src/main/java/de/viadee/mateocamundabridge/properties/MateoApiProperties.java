@@ -1,17 +1,16 @@
 package de.viadee.mateocamundabridge.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * @author Marcel_Flasskamp
- */
 @Validated
-@Component
+@Configuration
+@EnableConfigurationProperties
 @ConfigurationProperties(prefix = "de.viadee.mateo.rpa.mateo-api")
 public class MateoApiProperties {
 

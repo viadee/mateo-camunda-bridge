@@ -31,10 +31,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.*;
 
-/**
- * @author Marcel_Flasskamp
- * Service class for one mateo instance to call directly
- */
 @Service
 public class MateoService {
 

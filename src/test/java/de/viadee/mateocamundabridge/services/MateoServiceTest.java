@@ -29,9 +29,6 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-/**
- * @author Marcel_Flasskamp
- */
 @ExtendWith(SpringExtension.class)
 @SpringJUnitConfig
 @SpringBootTest
