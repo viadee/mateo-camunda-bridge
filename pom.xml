@@ -13,7 +13,7 @@
 
    <groupId>de.viadee</groupId>
    <artifactId>mateo-camunda-bridge</artifactId>
-   <version>0.0.3-SNAPSHOT</version>
+   <version>0.0.1</version>
    <name>Camunda Mateo Bridge</name>
    <description>Die Mateo-Camunda-Bridge ist eine eigenständige Anwendung, die es ermöglicht, mateo-Skripts aus
       BPMN-Modellen aufzurufen, die in einer Camunda Engine eingesetzt werden.
@@ -38,7 +38,7 @@
 
    <properties>
       <!-- settings -->
-      <java.version>15</java.version>
+      <java.version>11</java.version>
 
       <!-- versions -->
       <external-task-client.version>1.4.1</external-task-client.version>
