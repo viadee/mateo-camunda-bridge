@@ -27,7 +27,7 @@ The mateo-orchestrator is under development and will be released soon.
 To run test scripts from Camunda you need:
 
 - A running mateo instance (at least version 3.7.3) or mateo-orchestrator
-- Camunda BPM 7.14 Enterprise Edition or higher
+- Camunda BPM 7.14 or higher
 
 To design a BPMN model that connects to one or more mateos via the bridge, 
 the following tools are very helpful (but not required):
