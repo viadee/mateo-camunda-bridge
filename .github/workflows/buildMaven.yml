@@ -20,6 +20,13 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+        working-directory: .
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v2
         with:
