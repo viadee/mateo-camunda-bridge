@@ -1,17 +1,10 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
 name: Build and Deploy Mateo Camunda Bridge
-
-env:
-  # TODO: Change variable to your image's name.
-  IMAGE_NAME: mateo_camunda_bridge_image
-
 
 # Controls when the action will run.
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  release:
   
 jobs:
   push_to_registry:
