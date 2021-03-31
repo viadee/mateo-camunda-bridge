@@ -13,7 +13,7 @@
 
    <groupId>de.viadee</groupId>
    <artifactId>mateo-camunda-bridge</artifactId>
-   <version>0.0.2</version>
+   <version>0.0.3-SNAPSHOT</version>
    <name>Camunda Mateo Bridge</name>
    <description>Die Mateo-Camunda-Bridge ist eine eigenständige Anwendung, die es ermöglicht, mateo-Skripts aus
       BPMN-Modellen aufzurufen, die in einer Camunda Engine eingesetzt werden.
