@@ -20,13 +20,18 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+        
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: '11'
+         java-version: '15' # The JDK version to make available on the path.
+         java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
+         architecture: x64 # (x64 or x86) - defaults to x64
+         
       - name: Build with Maven
         run: mvn -B package --file pom.xml
         working-directory: .
+        
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v2
         with:
