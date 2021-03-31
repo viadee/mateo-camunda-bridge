@@ -7,4 +7,4 @@ COPY application.yml /opt/mateo-camunda-bridge/
 EXPOSE 8082
 
 WORKDIR /opt/mateo-camunda-bridge
-CMD  [ "java", "-Dspring.profiles.active=default", "-jar", "mateo-camunda-bridge-0.0.2jar" ]
+CMD  [ "java", "-Dspring.profiles.active=default", "-jar", "mateo-camunda-bridge-0.0.2.jar" ]
