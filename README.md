@@ -18,8 +18,7 @@ Once the script is done, the process continues. The stored result variables of m
 ### Multi Mateo Instances
 Furthermore, the mateo-camunda-bridge can serve as a connector between Camunda (BPMN) and the mateo-orchestrator. 
 The functionality is the same as above, with the difference, 
-that the scripts are transferred to the ![Mateo-Orchestrator](https://github.com/viadee/mateo-orchestrator).
-The mateo-orchestrator is under development and will be released soon.
+that the scripts are transferred to the [Mateo-Orchestrator](https://github.com/viadee/mateo-orchestrator).
 
 
 ## Prerequisites and supported environments
