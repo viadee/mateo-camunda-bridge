@@ -56,6 +56,8 @@ public class MateoService {
 
     private static final String SSL = "SSL";
 
+    private static final String EMPTY_STRING = "";
+
     private final RestTemplate restTemplate;
 
     protected final MateoApiProperties mateoApiProperties;
@@ -78,7 +80,8 @@ public class MateoService {
      * @param outputParams output variables for the testscript
      * @return response from mateo
      */
-    public ReportDTO startScriptWithVariables(String scriptName, Map<String, Object> inputParams, List<String> outputParams) {
+    public ReportDTO startScriptWithVariables(String scriptName, Map<String, Object> inputParams,
+            List<String> outputParams) {
         setStorageVariables(VariableConverter.toMapStringString(inputParams));
         ReportDTO reportDTO = startScript(scriptName);
         reportDTO.setOutputVariables(getStorageVariables(outputParams));
@@ -114,10 +117,13 @@ public class MateoService {
                     .build()
                     .toUri();
             responseEntity = restTemplate.getForEntity(uri.toString(), String.class);
-            if (responseEntity.getStatusCodeValue() >= 300 || responseEntity.getStatusCode().equals(HttpStatus.NO_CONTENT) ||Objects.isNull(responseEntity.getBody())) {
+            if (responseEntity.getStatusCodeValue() >= 300) {
                 LOGGER.warn("Variable: {} could not be read", variable);
                 failed = true;
                 resultMap.put(variable, NOT_FOUND);
+            } else if (responseEntity.getStatusCode().equals(HttpStatus.NO_CONTENT) ||
+                    Objects.isNull(responseEntity.getBody())) {
+                resultMap.put(variable, EMPTY_STRING);
             } else {
                 resultMap.put(variable, responseEntity.getBody());
             }
